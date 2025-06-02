@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ImguiWindows\ImguiWindows.csproj" />
+        <ProjectReference Include="..\ImGuiWindows.Silk.NET\ImGuiWindows.csproj" />
     </ItemGroup>
 
     <ItemGroup>

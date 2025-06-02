@@ -1,4 +1,4 @@
-﻿using ImguiWindows;
+﻿using ImGuiWindows;
 using Silk.NET.GLFW;
 using Silk.NET.Input.Glfw;
 using Silk.NET.Windowing;
