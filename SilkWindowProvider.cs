@@ -25,12 +25,13 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
         _fontPack = fontPack;
     }
 
-    public void Show(string title, IImguiDrawer drawer, bool autoSize = false, in SimpleWindowOptions? options = null)
+    public void Show(string title, IImguiDrawer drawer, in SimpleWindowOptions? options = null)
     {
         var fullOptions = ConstructWindowOptions(options, title);
         var window = new GLWindow(fullOptions);
         
-        var windowHelper = new WindowHelper(window, drawer, _fontPack, ContextLock, GetWindowScale, autoSize);
+        var sizeFlags = options?.SizeFlags ?? DefaultSizeFlags;
+        var windowHelper = new WindowHelper(window, drawer, _fontPack, ContextLock, GetWindowScale, sizeFlags);
         windowHelper.RunUntilClosed();
     }
 
@@ -68,7 +69,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
             fullOptions.Size = val.Size.ToVector2DInt();
             fullOptions.FramesPerSecond = val.Fps;
             fullOptions.VSync = val.Vsync;
-            fullOptions.WindowBorder = val.IsResizable ? WindowBorder.Resizable : WindowBorder.Fixed;
+            fullOptions.WindowBorder = val.SizeFlags.HasFlag(WindowSizeFlags.ResizeWindow) ? WindowBorder.Resizable : WindowBorder.Fixed;
             fullOptions.TopMost = val.AlwaysOnTop;
         }
         
@@ -79,7 +80,8 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
 
     public FontPack? FontPack => _fontPack;
     private FontPack? _fontPack;
-    
+
+    private static readonly WindowSizeFlags DefaultSizeFlags = WindowSizeFlags.ResizeWindow | WindowSizeFlags.ResizeGui;
     private static readonly WindowOptions DefaultOptions = new()
                                                                {
                                                                    API = GraphicsAPI.Default,
@@ -95,7 +97,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
                                                                    PreferredBitDepth = new Vector4D<int>(8, 8, 8, 8),
                                                                    Samples = 0,
                                                                    VSync = true,
-                                                                   TopMost = true,
+                                                                   TopMost = false,
                                                                    WindowBorder = WindowBorder.Resizable
                                                                };
     
