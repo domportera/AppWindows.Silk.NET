@@ -71,6 +71,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
             fullOptions.VSync = val.Vsync;
             fullOptions.WindowBorder = val.SizeFlags.HasFlag(WindowSizeFlags.ResizeWindow) ? WindowBorder.Resizable : WindowBorder.Fixed;
             fullOptions.TopMost = val.AlwaysOnTop;
+            fullOptions.IsEventDriven = val.RenderLoopWaitsForEvents;
         }
         
         fullOptions.Title = title;
