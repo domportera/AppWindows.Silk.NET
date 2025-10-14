@@ -19,7 +19,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
     }
 
     public object ContextLock { get; } = new();
-    
+
     public void SetFonts(FontPack fontPack)
     {
         _fontPack = fontPack;
@@ -29,7 +29,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
     {
         var fullOptions = ConstructWindowOptions(options, title);
         var window = new GLWindow(fullOptions);
-        
+
         var sizeFlags = options?.SizeFlags ?? DefaultSizeFlags;
         var windowHelper = new WindowHelper(window, drawer, _fontPack, ContextLock, GetWindowScale, sizeFlags);
         windowHelper.RunUntilClosed();
@@ -58,8 +58,8 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
         glfw.GetMonitorContentScale(monitorPtr, out var xscale, out var yscale);
         return 1f / Math.Max(xscale, yscale);
     }
-    
-    
+
+
     private static WindowOptions ConstructWindowOptions(in SimpleWindowOptions? options, string title)
     {
         var fullOptions = DefaultOptions;
@@ -69,13 +69,15 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
             fullOptions.Size = val.Size.ToVector2DInt();
             fullOptions.FramesPerSecond = val.Fps;
             fullOptions.VSync = val.Vsync;
-            fullOptions.WindowBorder = val.SizeFlags.HasFlag(WindowSizeFlags.ResizeWindow) ? WindowBorder.Resizable : WindowBorder.Fixed;
+            fullOptions.WindowBorder = val.SizeFlags.HasFlag(WindowSizeFlags.ResizeWindow)
+                ? WindowBorder.Resizable
+                : WindowBorder.Fixed;
             fullOptions.TopMost = val.AlwaysOnTop;
             fullOptions.IsEventDriven = val.RenderLoopWaitsForEvents;
         }
-        
+
         fullOptions.Title = title;
-        
+
         return fullOptions;
     }
 
@@ -83,23 +85,23 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
     private FontPack? _fontPack;
 
     private static readonly WindowSizeFlags DefaultSizeFlags = WindowSizeFlags.ResizeWindow | WindowSizeFlags.ResizeGui;
+
     private static readonly WindowOptions DefaultOptions = new()
-                                                               {
-                                                                   API = GraphicsAPI.Default,
-                                                                   IsEventDriven = true,
-                                                                   ShouldSwapAutomatically = true,
-                                                                   IsVisible = true,
-                                                                   Position = new Vector2D<int>(600, 600),
-                                                                   Size = new Vector2D<int>(400, 320),
-                                                                   FramesPerSecond = 60,
-                                                                   UpdatesPerSecond = 60,
-                                                                   PreferredDepthBufferBits = 0,
-                                                                   PreferredStencilBufferBits = 0,
-                                                                   PreferredBitDepth = new Vector4D<int>(8, 8, 8, 8),
-                                                                   Samples = 0,
-                                                                   VSync = true,
-                                                                   TopMost = false,
-                                                                   WindowBorder = WindowBorder.Resizable
-                                                               };
-    
+    {
+        API = GraphicsAPI.Default,
+        IsEventDriven = true,
+        ShouldSwapAutomatically = true,
+        IsVisible = true,
+        Position = new Vector2D<int>(600, 600),
+        Size = new Vector2D<int>(400, 320),
+        FramesPerSecond = 60,
+        UpdatesPerSecond = 60,
+        PreferredDepthBufferBits = 0,
+        PreferredStencilBufferBits = 0,
+        PreferredBitDepth = new Vector4D<int>(8, 8, 8, 8),
+        Samples = 0,
+        VSync = true,
+        TopMost = false,
+        WindowBorder = WindowBorder.Resizable
+    };
 }

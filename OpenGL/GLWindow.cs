@@ -21,14 +21,14 @@ internal sealed class GLWindow : IWindowImplementation
             var api = GraphicsAPI.Default;
             options.API = api;
         }
-        
+
         WindowOptions = options;
         _renderContent = renderContent;
     }
-    
+
     public WindowOptions WindowOptions { get; }
     public Color DefaultClearColor => Color.Black;
-    
+
     public bool Render(in Color clearColor, double deltaTime)
     {
         _graphicsContext!.ClearColor(clearColor);
@@ -36,15 +36,15 @@ internal sealed class GLWindow : IWindowImplementation
         _renderContent?.Invoke(_graphicsContext);
         return true;
     }
-    
+
     public void EndRender()
     {
     }
-    
+
     public void Dispose()
     {
     }
-    
+
     public NativeAPI? InitializeGraphicsAndInputContexts(IWindow window, out IInputContext inputContext)
     {
         _window = window;
@@ -53,17 +53,17 @@ internal sealed class GLWindow : IWindowImplementation
         _inputContext = inputContext;
         return _graphicsContext;
     }
-    
+
     public IImguiImplementation GetImguiImplementation()
     {
         return new GLImguiHandler(_window!.Title, _graphicsContext!, _window!, _inputContext!);
     }
-    
+
     public void OnWindowResize(Vector2D<int> size)
     {
         _graphicsContext!.Viewport(size);
     }
-    
+
     private GL? _graphicsContext;
     private IWindow? _window;
     private IInputContext? _inputContext;
