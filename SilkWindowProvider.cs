@@ -1,9 +1,13 @@
 ﻿using ImGuiWindows;
+using Silk.NET.Core.Native;
 using Silk.NET.GLFW;
 using Silk.NET.Input.Glfw;
+using Silk.NET.Input.Sdl;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
+using Silk.NET.SDL;
 using Silk.NET.Windowing.Glfw;
+using Silk.NET.Windowing.Sdl;
 using SilkWindows.OpenGL;
 
 namespace SilkWindows;
@@ -14,8 +18,16 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
     static SilkWindowProvider()
     {
         // Ensure that the instance is set at least once
-        GlfwWindowing.RegisterPlatform();
-        GlfwInput.RegisterPlatform();
+        if (OperatingSystem.IsWindows())
+        {
+            GlfwWindowing.RegisterPlatform();
+            GlfwInput.RegisterPlatform();
+        }
+        else
+        {
+            SdlWindowing.RegisterPlatform();
+            SdlInput.RegisterPlatform();
+        }
     }
 
     public object ContextLock { get; } = new();
@@ -37,26 +49,45 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
 
     private static unsafe float GetWindowScale(IWindow window)
     {
-        var glfw = Glfw.GetApi();
-        var monitor = window.Monitor;
-        if (monitor == null)
+        if (OperatingSystem.IsWindows())
         {
-            return 1f; // Default DPI if no monitor is available
+            var glfw = Glfw.GetApi();
+            var monitor = window.Monitor;
+            if (monitor == null)
+            {
+                return 1f; // Default DPI if no monitor is available
+            }
+
+            var monitorIdx = monitor.Index;
+            var glfwMonitors = glfw.GetMonitors(out int count);
+            if (monitorIdx >= count)
+            {
+                Console.WriteLine("Monitor index is out of bounds, cannot get monitor DPI.");
+                return 1f;
+            }
+
+            var monitorPtr = glfwMonitors[monitorIdx];
+
+            // Get the monitor's current scaling
+            glfw.GetMonitorContentScale(monitorPtr, out var xscale, out var yscale);
+            return 1f / Math.Max(xscale, yscale);
         }
 
-        var monitorIdx = monitor.Index;
-        var glfwMonitors = glfw.GetMonitors(out int count);
-        if (monitorIdx >= count)
+        using var sdl = Sdl.GetApi();
+        var sdlWindow = (Silk.NET.SDL.Window*)window.Handle;
+        int displayIndex = sdl.GetWindowDisplayIndex(sdlWindow);
+
+        float ddpi = 0, hdpi = 0, vdpi = 0;
+        if (sdl.GetDisplayDPI(displayIndex, &ddpi, &hdpi, &vdpi) == 0)
         {
-            Console.WriteLine("Monitor index is out of bounds, cannot get monitor DPI.");
+            // Standard DPI is usually 96
+            return 96f / ddpi;
+        }
+        else
+        {
+            // Fallback if DPI can't be retrieved
             return 1f;
-        }
-
-        var monitorPtr = glfwMonitors[monitorIdx];
-
-        // Get the monitor's current scaling
-        glfw.GetMonitorContentScale(monitorPtr, out var xscale, out var yscale);
-        return 1f / Math.Max(xscale, yscale);
+        } 
     }
 
 
