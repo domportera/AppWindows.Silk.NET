@@ -1,7 +1,9 @@
+using System.Text;
 using ImGuiWindows;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.OpenGL.Extensions.ImGui;
+using Silk.NET.SDL;
 using Silk.NET.Windowing;
 
 namespace SilkWindows;
@@ -16,9 +18,19 @@ public sealed class GLImguiHandler : IImguiImplementation
         _inputContext = inputContext;
     }
 
-    public void StartImguiFrame(float deltaSeconds)
+    public bool StartImguiFrame(float deltaSeconds)
     {
-        _imguiController!.Update(deltaSeconds);
+        try
+        {
+            _imguiController!.Update(deltaSeconds);
+            return true;
+        }
+        catch (SdlException e)
+        {
+            var log = e.Message.Contains("HID") ? e.Message : e.ToString();
+            Console.Error.WriteLine($"{nameof(SdlException)}: {log}");
+            return false;
+        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
     }
 
     public void EndImguiFrame()
