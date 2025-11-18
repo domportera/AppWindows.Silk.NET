@@ -1,8 +1,10 @@
 ﻿using ImGuiWindows;
+using Silk.NET.Core.Native;
 using Silk.NET.Input.Glfw;
 using Silk.NET.Input.Sdl;
 using Silk.NET.Windowing;
 using Silk.NET.Maths;
+using Silk.NET.OpenGL;
 using Silk.NET.Windowing.Glfw;
 using Silk.NET.Windowing.Sdl;
 using SilkWindows.OpenGL;
@@ -22,7 +24,7 @@ public sealed class SilkWindowProvider : IImguiWindowProvider
     public void SetFonts(FontPack fontPack) => FontPack = fontPack;
 
     // todo - multi-backend
-    public IWindowImplementation CreateWindow(in WindowOptions options) => new GLWindow(options);
+    public IWindowImplementation CreateWindow(in WindowOptions options, ImGuiWindow? parent) => new GLWindow(options, parent);
 
     public FontPack? FontPack { get; private set; }
 }
