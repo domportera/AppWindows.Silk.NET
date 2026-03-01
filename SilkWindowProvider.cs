@@ -1,12 +1,5 @@
 ﻿using ImGuiWindows;
-using Silk.NET.Core.Native;
-using Silk.NET.Input.Glfw;
-using Silk.NET.Input.Sdl;
 using Silk.NET.Windowing;
-using Silk.NET.Maths;
-using Silk.NET.OpenGL;
-using Silk.NET.Windowing.Glfw;
-using Silk.NET.Windowing.Sdl;
 using SilkWindows.OpenGL;
 
 namespace SilkWindows;
