@@ -108,33 +108,39 @@ internal sealed class GLWindow : IWindowImplementation
         public int UseCount { get; set; }
         public nint GetProcAddress(string proc, int? slot = null)
         {
-            return Context.Context.GetProcAddress(proc, slot);
+            return Context!.Context.GetProcAddress(proc, slot);
         }
 
         public bool TryGetProcAddress(string proc, [UnscopedRef] out nint addr, int? slot = null)
         {
+            if (Context == null)
+            {
+                addr = 0;
+                return false;
+            }
+            
             return Context.Context.TryGetProcAddress(proc, out addr, slot);
         }
     }
 
     private class InputSharedDisposable : ISharedDisposable<IInputContext>, IInputContext
     {
-        public nint Handle => Context.Handle;
+        public nint Handle => Context!.Handle;
 
-        public IReadOnlyList<IGamepad> Gamepads => Context.Gamepads;
+        public IReadOnlyList<IGamepad> Gamepads => Context!.Gamepads;
 
-        public IReadOnlyList<IJoystick> Joysticks => Context.Joysticks;
+        public IReadOnlyList<IJoystick> Joysticks => Context!.Joysticks;
 
-        public IReadOnlyList<IKeyboard> Keyboards => Context.Keyboards;
+        public IReadOnlyList<IKeyboard> Keyboards => Context!.Keyboards;
 
-        public IReadOnlyList<IMouse> Mice => Context.Mice;
+        public IReadOnlyList<IMouse> Mice => Context!.Mice;
 
-        public IReadOnlyList<IInputDevice> OtherDevices => Context.OtherDevices;
+        public IReadOnlyList<IInputDevice> OtherDevices => Context!.OtherDevices;
 
         public event Action<IInputDevice, bool>? ConnectionChanged
         {
-            add => Context.ConnectionChanged += value;
-            remove => Context.ConnectionChanged -= value;
+            add => Context!.ConnectionChanged += value;
+            remove => Context!.ConnectionChanged -= value;
         }
 
         public IInputContext? Context { get; set; }

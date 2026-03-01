@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ImGuiWindows.Silk.NET\ImGuiWindows.csproj"/>
+        <ProjectReference Include="../../ImGuiWindows.Silk.NET/ImGuiWindows.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -20,17 +20,4 @@
         <PackageReference Include="Silk.NET.Windowing" Version="2.20.0"/>
         <PackageReference Include="Silk.NET.Windowing.Sdl" Version="2.22.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Silk.NET\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Silk.NET\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Silk.NET\**" />
-    </ItemGroup>
-
 </Project>
