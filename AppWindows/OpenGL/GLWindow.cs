@@ -1,14 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
 using ImGuiWindows;
-using Silk.NET.Core.Contexts;
-using Silk.NET.Core.Native;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 using Color = System.Drawing.Color;
 
-namespace SilkWindows.OpenGL;
+namespace AppWindows.OpenGL;
 
 // ReSharper disable once InconsistentNaming
 internal sealed class GLWindow : IWindowImplementation

@@ -1,13 +1,11 @@
-using System.Text;
 using ImGuiWindows;
-using Silk.NET.Core.Contexts;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.SDL;
 using Silk.NET.Windowing;
 
-namespace SilkWindows;
+namespace AppWindows.OpenGL;
 
 public sealed class GLImguiHandler : IImguiImplementation
 {

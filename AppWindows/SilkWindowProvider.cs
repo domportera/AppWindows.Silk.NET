@@ -1,8 +1,8 @@
-﻿using ImGuiWindows;
+﻿using AppWindows.OpenGL;
+using ImGuiWindows;
 using Silk.NET.Windowing;
-using SilkWindows.OpenGL;
 
-namespace SilkWindows;
+namespace AppWindows;
 
 //https://github.com/dotnet/Silk.NET/blob/main/examples/CSharp/OpenGL%20Tutorials/Tutorial%201.1%20-%20Hello%20Window/Program.cs
 public sealed class SilkWindowProvider : IImguiWindowProvider

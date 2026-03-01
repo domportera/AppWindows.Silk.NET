@@ -1,0 +1,10 @@
+<Solution>
+    <Project Path="AppWindows\AppWindows.csproj" />
+    <Project Path="ImGuiWindows/ImGuiWindows.csproj" />
+    <Project Path="Silk.NET/sources/Core/Core/Silk.NET.Core.csproj" />
+    <Project Path="Silk.NET/sources/Input/Input/Silk.NET.Input.csproj" />
+    <Project Path="Silk.NET/sources/Maths/Maths/Silk.NET.Maths.csproj" />
+    <Project Path="Silk.NET/sources/SDL/Native/Silk.NET.SDL.Native.csproj" />
+    <Project Path="Silk.NET/sources/SDL/SDL/Silk.NET.SDL.csproj" />
+    <Project Path="Silk.NET/sources/Windowing/Windowing/Silk.NET.Windowing.csproj" />
+</Solution>

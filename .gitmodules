@@ -1,0 +1,7 @@
+[submodule "Silk.NET"]
+	path = Silk.NET
+	url = git@github.com:dotnet/Silk.NET.git
+	branch = feature/input-3.0
+[submodule "ImGuiWindows"]
+	path = ImGuiWindows
+	url = git@github.com:domportera/ImGuiWindows.Silk.NET
