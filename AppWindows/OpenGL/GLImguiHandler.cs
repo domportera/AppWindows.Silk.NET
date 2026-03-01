@@ -1,4 +1,5 @@
 using ImGuiWindows;
+using Silk.NET.Core;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.OpenGL.Extensions.ImGui;
@@ -9,7 +10,7 @@ namespace AppWindows.OpenGL;
 
 public sealed class GLImguiHandler : IImguiImplementation
 {
-    public GLImguiHandler(string title, GL graphicsContext, IWindow window, IInputContext inputContext)
+    public GLImguiHandler(string title, IGLContext graphicsContext, IWindow window, IInputContext inputContext)
     {
         Title = title;
         _graphicsContext = graphicsContext;
