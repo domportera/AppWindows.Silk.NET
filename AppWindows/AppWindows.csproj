@@ -15,8 +15,13 @@
         <ProjectReference Include="..\Silk.NET\sources\Core\Core\Silk.NET.Core.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\Input\Input\Silk.NET.Input.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\Maths\Maths\Silk.NET.Maths.csproj" />
+        <ProjectReference Include="..\Silk.NET\sources\OpenGL\OpenGL\Silk.NET.OpenGL.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\SDL\SDL\Silk.NET.SDL.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\Windowing\Windowing\Silk.NET.Windowing.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="XenoAtom.Logging" Version="1.1.2" />
     </ItemGroup>
 
 </Project>

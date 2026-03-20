@@ -5,6 +5,9 @@
       <SelectionState runConfigName="Silk.NET.Windowing">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="Silk.NET.SDL.Native">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
