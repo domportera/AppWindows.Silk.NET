@@ -15,7 +15,7 @@ public readonly record struct GLShaderInfo(uint Program, uint Vert, uint Frag);
 /// <summary>
 /// The Dear ImGui renderer for OpenGL, implemented as an <see cref="IImguiImplementation"/>.
 /// </summary>
-public class OpenGLImGuiController : IImguiImplementation
+internal class OpenGLImGuiController : IImguiImplementation
 {
     private readonly int _attribLocationTex;
     private readonly int _attribLocationProjMtx;
@@ -67,28 +67,28 @@ public class OpenGLImGuiController : IImguiImplementation
             ImGuiLog.Debug($"[OPENGL] Creating font texture: size={width}x{height}");
 
             int lastTexture = 0;
-            GL.GetError().Log();
+            GL.GetError().LogE();
             GL.GetInteger(GLEnum.TextureBinding2D, &lastTexture);
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
             var texId = GL.GenTexture();
-            GL.GetError().Log();
+            GL.GetError().LogE();
             ImGuiLog.Debug($"[OPENGL] Font TexID = {(int)texId}");
             
             GL.BindTexture(GLEnum.Texture2D, texId);
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
             GL.TexParameter(GLEnum.Texture2D, GLEnum.TextureMinFilter, (int)GLEnum.Linear);
-            GL.GetError().Log();
+            GL.GetError().LogE();
             GL.TexParameter(GLEnum.Texture2D, GLEnum.TextureMagFilter, (int)GLEnum.Linear);
-            GL.GetError().Log();
+            GL.GetError().LogE();
             GL.TexParameter(GLEnum.Texture2D, GLEnum.TextureWrapS, (int)GLEnum.ClampToEdge);
-            GL.GetError().Log();
+            GL.GetError().LogE();
             GL.TexParameter(GLEnum.Texture2D, GLEnum.TextureWrapT, (int)GLEnum.ClampToEdge);
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
             GL.PixelStore(GLEnum.UnpackRowLength, 0);
-            GL.GetError().Log();
+            GL.GetError().LogE();
             GL.TexImage2D(
                 GLEnum.Texture2D,
                 0,
@@ -99,38 +99,38 @@ public class OpenGLImGuiController : IImguiImplementation
                 GLEnum.Rgba,
                 GLEnum.UnsignedByte,
                 (void*)pixels);
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
             io.Fonts.SetTexID((nint)texId);
 
             GL.BindTexture(GLEnum.Texture2D, (uint)lastTexture);
             
             // Check for errors
-            GL.GetError().Log();
+            GL.GetError().LogE();
             return texId;
         }
     }
 
     private unsafe void SetupRenderState(ImDrawDataPtr drawDataPtr, int framebufferWidth, int framebufferHeight)
     {
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Viewport(0, 0, (uint)framebufferWidth, (uint)framebufferHeight);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.Enable(GLEnum.Blend);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BlendEquation(GLEnum.FuncAdd);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BlendFuncSeparate(GLEnum.SrcAlpha, GLEnum.OneMinusSrcAlpha, GLEnum.One, GLEnum.OneMinusSrcAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Disable(GLEnum.CullFace);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Disable(GLEnum.DepthTest);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Disable(GLEnum.StencilTest);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Enable(GLEnum.ScissorTest);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         
         if (!_useGles)
         {
@@ -165,39 +165,39 @@ public class OpenGLImGuiController : IImguiImplementation
         ];
 
         GL.ActiveTexture(GLEnum.Texture0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.UseProgram(_shader.Program);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Uniform1(_attribLocationTex, 0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.UniformMatrix4(_attribLocationProjMtx, 1, false, orthoProjection);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BindSampler(0, 0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         _vertexArrayObject = GL.GenVertexArray();
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BindVertexArray(_vertexArrayObject);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.BindBuffer(GLEnum.ArrayBuffer, _vboHandle);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BindBuffer(GLEnum.ElementArrayBuffer, _elementsHandle);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.EnableVertexAttribArray((uint)_attribLocationVtxPos);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.EnableVertexAttribArray((uint)_attribLocationVtxUV);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.EnableVertexAttribArray((uint)_attribLocationVtxColor);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.VertexAttribPointer((uint)_attribLocationVtxPos, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.VertexAttribPointer((uint)_attribLocationVtxUV, 2, GLEnum.Float, false, (uint)sizeof(ImDrawVert), (void*)8);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.VertexAttribPointer((uint)_attribLocationVtxColor, 4, GLEnum.UnsignedByte, true, (uint)sizeof(ImDrawVert), (void*)16);
-        GL.GetError().Log();
+        GL.GetError().LogE();
     }
 
 
@@ -224,48 +224,48 @@ public class OpenGLImGuiController : IImguiImplementation
             lastBlendEquationAlpha = 0;
 
         GL.GetInteger(GLEnum.ActiveTexture, &lastActiveTexture);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.ActiveTexture(GLEnum.Texture0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.CurrentProgram, &lastProgram);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.GetInteger(GLEnum.TextureBinding2D, &lastTexture);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.SamplerBinding, &lastSampler);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.ArrayBufferBinding, &lastArrayBuffer);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.GetInteger(GLEnum.VertexArrayBinding, &lastVertexArrayObject);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         Span<int> lastPolygonMode = stackalloc int[2];
         if (!_useGles)
         {
             GL.GetInteger(GLEnum.PolygonMode, lastPolygonMode);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         Span<int> lastScissorBox = stackalloc int[4];
         GL.GetInteger(GLEnum.ScissorBox, lastScissorBox);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.BlendSrcRgb, &lastBlendSrcRgb);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.GetInteger(GLEnum.BlendDstRgb, &lastBlendDstRgb);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.BlendSrcAlpha, &lastBlendSrcAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.GetInteger(GLEnum.BlendDstAlpha, &lastBlendDstAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.GetInteger(GLEnum.BlendEquationRgb, &lastBlendEquationRgb);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.GetInteger(GLEnum.BlendEquationAlpha, &lastBlendEquationAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         bool lastEnableBlend = GL.IsEnabled(GLEnum.Blend);
         bool lastEnableCullFace = GL.IsEnabled(GLEnum.CullFace);
@@ -292,12 +292,12 @@ public class OpenGLImGuiController : IImguiImplementation
             GL.BufferData(GLEnum.ArrayBuffer, (nuint)(cmdListPtr.VtxBuffer.Size * sizeof(ImDrawVert)),
                 (void*)cmdListPtr.VtxBuffer.Data, GLEnum.StreamDraw);
             
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
 
             GL.BufferData(GLEnum.ElementArrayBuffer, (nuint)(cmdListPtr.IdxBuffer.Size * sizeof(ushort)),
                 (void*)cmdListPtr.IdxBuffer.Data, GLEnum.StreamDraw);
-            GL.GetError().Log();
+            GL.GetError().LogE();
 
             for (int iCmd = 0; iCmd < cmdListPtr.CmdBuffer.Size; iCmd++)
             {
@@ -321,16 +321,16 @@ public class OpenGLImGuiController : IImguiImplementation
                         // Apply scissor/clipping rectangle
                         GL.Scissor((int)clipRect.X, (int)(framebufferHeight - clipRect.W),
                             (uint)(clipRect.Z - clipRect.X), (uint)(clipRect.W - clipRect.Y));
-                        GL.GetError().Log();
+                        GL.GetError().LogE();
 
                         // Bind texture, Draw
                         var textureId = (uint)cmdPtr.TextureId;
                         GL.BindTexture(GLEnum.Texture2D, textureId);
-                        GL.GetError().Log();
+                        GL.GetError().LogE();
 
                         GL.DrawElementsBaseVertex(GLEnum.Triangles, cmdPtr.ElemCount, GLEnum.UnsignedShort,
                             (void*)(cmdPtr.IdxOffset * sizeof(ushort)), (int)cmdPtr.VtxOffset);
-                        GL.GetError().Log();
+                        GL.GetError().LogE();
                     }
                 }
             }
@@ -338,85 +338,85 @@ public class OpenGLImGuiController : IImguiImplementation
 
         // Destroy the temporary VAO
         GL.DeleteVertexArray(_vertexArrayObject);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         _vertexArrayObject = 0;
 
         // Restore modified GL state
         GL.UseProgram((uint)lastProgram);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BindTexture(GLEnum.Texture2D, (uint)lastTexture);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.BindSampler(0, (uint)lastSampler);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.ActiveTexture((GLEnum)lastActiveTexture);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.BindVertexArray((uint)lastVertexArrayObject);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.BindBuffer(GLEnum.ArrayBuffer, (uint)lastArrayBuffer);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BlendEquationSeparate((GLEnum)lastBlendEquationRgb, (GLEnum)lastBlendEquationAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BlendFuncSeparate((GLEnum)lastBlendSrcRgb, (GLEnum)lastBlendDstRgb, (GLEnum)lastBlendSrcAlpha,
             (GLEnum)lastBlendDstAlpha);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         if (lastEnableBlend)
         {
             GL.Enable(GLEnum.Blend);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
         else
         {
             GL.Disable(GLEnum.Blend);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         if (lastEnableCullFace)
         {
             GL.Enable(GLEnum.CullFace);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
         else
         {
             GL.Disable(GLEnum.CullFace);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         if (lastEnableDepthTest)
         {
             GL.Enable(GLEnum.DepthTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
         else
         {
             GL.Disable(GLEnum.DepthTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         if (lastEnableStencilTest)
         {
             GL.Enable(GLEnum.StencilTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
         else
         {
             GL.Disable(GLEnum.StencilTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         if (lastEnableScissorTest)
         {
             GL.Enable(GLEnum.ScissorTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
         else
         {
             GL.Disable(GLEnum.ScissorTest);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
 
@@ -425,20 +425,20 @@ public class OpenGLImGuiController : IImguiImplementation
             if (lastEnablePrimitiveRestart)
             {
                 GL.Enable(GLEnum.PrimitiveRestart);
-                GL.GetError().Log();
+                GL.GetError().LogE();
             }
             else
             {
                 GL.Disable(GLEnum.PrimitiveRestart);
-                GL.GetError().Log();
+                GL.GetError().LogE();
             }
 
             GL.PolygonMode(GLEnum.FrontAndBack, (GLEnum)lastPolygonMode[0]);
-            GL.GetError().Log();
+            GL.GetError().LogE();
         }
 
         GL.Scissor(lastScissorBox[0], lastScissorBox[1], (uint)lastScissorBox[2], (uint)lastScissorBox[3]);
-        GL.GetError().Log();
+        GL.GetError().LogE();
     }
 
     /// <summary>

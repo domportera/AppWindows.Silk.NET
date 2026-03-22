@@ -25,9 +25,9 @@ public sealed class OpenGLWindow : SurfaceRenderer
     {
         evt.Surface.MakeCurrent();
         GL.Viewport(0, 0, (uint)frameBufferWidth, (uint)frameBufferHeight);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.Clear(ClearBufferMask.ColorBufferBit);
-        GL.GetError().Log();
+        GL.GetError().LogE();
     }
 
     protected override void OnPause(SurfaceLifecycleEvent evt, bool isPaused)
@@ -39,15 +39,15 @@ public sealed class OpenGLWindow : SurfaceRenderer
     {
         evt.Surface.MakeCurrent();
         GL.DeleteVertexArray(_vao);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.DeleteBuffer(_vbo);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.DeleteProgram(_prog);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.DeleteShader(_vert);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.DeleteShader(_frag);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         evt.Surface.OpenGL!.Dispose();
     }
 
@@ -76,39 +76,39 @@ public sealed class OpenGLWindow : SurfaceRenderer
     private static void InitializeOpenGLRenderer(out uint vao, out uint vbo, out uint prog, out uint vert,
         out uint frag)
     {
-        GL.GetError().Log();
+        GL.GetError().LogE();
         ImGuiLog.Debug("=== BEGIN OPENGL INFORMATION");
         foreach (var val in Enum.GetValues<Silk.NET.OpenGL.StringName>())
         {
             ImGuiLog.Debug($"{val} = {GL.GetString(val).ReadToString()}");
-            GL.GetError().Log();
+            GL.GetError().LogW();
         }
 
         ImGuiLog.Debug("=== END OPENGL INFORMATION");
 
         vbo = GL.GenBuffer();
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         float[] vertices = [-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f];
         GL.BufferData(BufferTarget.ArrayBuffer, (nuint)(vertices.Length * sizeof(float)),
             vertices[0].AsRef(),
             BufferUsage.StaticDraw);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         vao = GL.GenVertexArray();
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.BindVertexArray(vao);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), default);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.EnableVertexAttribArray(0);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         vert = GL.CreateShader(ShaderType.VertexShader);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         frag = GL.CreateShader(ShaderType.FragmentShader);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         const string vertSource = """
                                   #version 150
@@ -148,49 +148,49 @@ public sealed class OpenGLWindow : SurfaceRenderer
 
         var vertSourceLength = vertSource.Length;
         GL.ShaderSource(vert, 1, new[] { vertSource }, vertSourceLength.AsRef());
-        GL.GetError().Log();
+        GL.GetError().LogE();
         var fragSourceLength = fragSource.Length;
         GL.ShaderSource(frag, 1, new[] { fragSource }, fragSourceLength.AsRef());
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
         GL.CompileShader(vert);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         var vertCompiled = 0;
         GL.GetShader(vert, ShaderParameterName.CompileStatus, vertCompiled.AsRef());
-        GL.GetError().Log();
+        GL.GetError().LogE();
         if (vertCompiled == 0)
         {
             var logLen = 0u;
-            GL.GetError().Log();
+            GL.GetError().LogE();
             var res = GL.GetShaderInfoLog(vert, logLen.AsRef());
-            GL.GetError().Log();
+            GL.GetError().LogE();
             throw new InvalidOperationException($"Vertex shader compilation failed: {res} | {logLen}");
         }
 
         GL.CompileShader(frag);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         var fragCompiled = 0;
         GL.GetShader(frag, ShaderParameterName.CompileStatus, fragCompiled.AsRef());
-        GL.GetError().Log();
+        GL.GetError().LogE();
         if (fragCompiled == 0)
         {
             var logLen = 0u;
             var res = GL.GetShaderInfoLog(vert, logLen.AsRef());
-            GL.GetError().Log();
+            GL.GetError().LogE();
             throw new InvalidOperationException($"Fragment shader compilation failed: {res} | {logLen}");
         }
 
         prog = GL.CreateProgram();
         GL.AttachShader(prog, vert);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.AttachShader(prog, frag);
-        GL.GetError().Log();
+        GL.GetError().LogE();
         GL.LinkProgram(prog);
-        GL.GetError().Log();
+        GL.GetError().LogE();
 
        // GL.DeleteShader(vert);
        // GL.DeleteShader(frag);
         GL.UseProgram(prog);
-        GL.GetError().Log();
+        GL.GetError().LogE();
     }
 }

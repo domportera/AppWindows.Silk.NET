@@ -46,8 +46,18 @@ internal class TestDrawer : IImguiDrawer
         
         ImGui.ColorEdit4("Change me.....", ref _color);
         ImGui.Text($"Color: {_color:F1}");
+
+        var io = ImGui.GetIO();
+        ImGuiDebugging.DrawDebugInput(io);
+        DrawMouseInfo(io);
+        
         
         ImGui.ShowDemoWindow();
+    }
+
+    private static void DrawMouseInfo(ImGuiIOPtr io)
+    {
+      
     }
 
 
