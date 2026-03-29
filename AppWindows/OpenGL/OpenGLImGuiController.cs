@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using ImGuiNET;
 using ImGuiWindows;
+using ImGuiWindows.Contracts;
 using Silk.NET.OpenGL;
 
 namespace AppWindows.OpenGL;

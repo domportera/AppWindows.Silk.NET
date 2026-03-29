@@ -2,6 +2,7 @@
 using AppWindows.OpenGL;
 using ImGuiNET;
 using ImGuiWindows;
+using ImGuiWindows.DataTypes;
 using Silk.NET.Windowing;
 
 namespace Test;
@@ -33,6 +34,7 @@ internal class TestWindow : ISurfaceApplication
 internal class TestDrawer : IImguiDrawer
 {
     private Vector4 _color = Vector4.One;
+    private float _renderSize = 1f;
     public void Init()
     {
     }
@@ -48,7 +50,7 @@ internal class TestDrawer : IImguiDrawer
         ImGui.Text($"Color: {_color:F1}");
 
         var io = ImGui.GetIO();
-        ImGuiDebugging.DrawDebugInput(io);
+        ImGuiDebugging.DrawDebugInput(io, ref _renderSize);
         DrawMouseInfo(io);
         
         
