@@ -1,5 +1,6 @@
 <Solution>
     <Project Path="AppWindows\AppWindows.csproj" />
+    <Project Path="Common/Common.csproj" />
     <Project Path="ImGuiWindows/ImGuiWindows.csproj" />
     <Project Path="Silk.NET/sources/Core/Core/Silk.NET.Core.csproj" />
     <Project Path="Silk.NET/sources/Input/Input/Silk.NET.Input.csproj" />
