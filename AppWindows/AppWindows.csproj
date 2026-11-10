@@ -10,8 +10,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../ImGuiWindows/ImGuiWindows.csproj"/>
-
         <ProjectReference Include="..\Silk.NET\sources\Core\Core\Silk.NET.Core.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\Input\Input\Silk.NET.Input.csproj" />
         <ProjectReference Include="..\Silk.NET\sources\Maths\Maths\Silk.NET.Maths.csproj" />
